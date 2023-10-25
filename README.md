@@ -119,3 +119,124 @@ iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_
 gtkwave pes_demux_1_8_tb.vcd
 ```
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/1afee132-c851-42ab-82ec-aec29e282197)
+
+## OpenLane Flow
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/c7bfc467-da6d-4bb6-8cae-31f7d55cc573)
+
+OpenLANE flow consists of several stages. By default, all flow steps are run in sequence. Each stage may consist of multiple sub-stages. OpenLANE can also be run interactively as shown here.
+
+  1. Synthesis
+
+  <ul>
+      <li>Yosys - Performs RTL synthesis using GTech mapping</li>
+      <li>abc - Performs technology mappin to standard cells described in the PDK. We can adjust synthesis techniques using different integrated abc scripts to get desired results</li>
+      <li>OpenSTA - Performs static timing analysis on the resulting netlist to generate timing reports</li>
+      <li>Fault – Scan-chain insertion used for testing post fabrication. Supports ATPG and test patterns compaction</li>
+  </ul>
+
+  2. Floorplan and PDN
+
+  <ul>
+      <li>Init_fp - Defines the core area for the macro as well as the rows (used for placement) and the tracks (used for routing)</li>
+      <li>Ioplacer - Places the macro input and output ports</li>
+      <li>PDN - Generates the power distribution network</li>
+      <li>Tapcell - Inserts welltap and decap cells in the floorplan</li>
+      <li>Placement – Placement is done in two steps, one with global placement in which we place the designs across the chip, but they will not be legal placement with some standard cells overlapping each other, to fix this we perform a detailed placement which legalizes the design and ensures they fit in the standard cell rows</li>
+      <li>RePLace - Performs global placement</li>
+      <li>Resizer - Performs optional optimizations on the design</li>
+      <li>OpenPhySyn - Performs timing optimizations on the design</li>
+      <li>OpenDP - Perfroms detailed placement to legalize the globally placed components</li>
+  </ul>
+  3. CTS
+
+  <ul>
+      <li>TritonCTS - Synthesizes the clock distribution network</li>
+  </ul>
+
+
+4. Routing
+
+  <ul>
+      <li>FastRoute - Performs global routing to generate a guide file for the detailed router
+      </li>
+      <li>TritonRoute - Performs detailed routing from global routing guides</li>
+      <li>SPEF-Extractor - Performs SPEF extraction that include parasitic information</li>
+  </ul>
+
+5. GDSII Generation
+
+  <ul>
+      <li>Magic - Streams out the final GDSII layout file from the routed def</li>
+  </ul>
+
+ 6. Checks
+
+  <ul>
+      <li>Magic - Performs DRC Checks & Antenna Checks</li>
+      <li>Netgen - Performs LVS Checks </li>
+  </ul>
+
+## Invoking Openlane
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/84ca3818-e45c-41fd-9ea7-442508693c30)
+
+ - ./flow.tcl is the script which runs the OpenLANE flow
+ - OpenLANE can be run interactively or in autonomous mode 
+ - To run interactively, use the -interactive option with the ./flow.tcl script 
+
+## Package Importing
+Different software dependencies are needed to run OpenLANE. To import these into the OpenLANE tool we need to run:
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/cd8912a2-c032-4992-acc9-92bc96c2abfc)
+
+## Design Folder Heirarchy
+Each design hierarchy comes with two distinct components:
+1. Src folder - Contains verilog files and sdc constraint files
+2. Config.tcl files - Design specific configuration switches used by OpenLANE
+ 
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/c9ab9c48-1948-46e6-b6ba-57b381446df0)
+
+## Prepare Design
+prep is used to make file structure for our design. To set this up do:
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/2fce0666-b289-489a-aa5b-4bac18ec9d16)
+
+## Synthesis
+
+To run synthesis: Use `run_synthesis` command
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/1609f2cb-42c5-4bfb-b27f-5f8e4a9c9dad)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/4434c837-0cd7-4504-8d8f-9bbe4bab946b)
+
+
+## Floorplan
+
+To run floorplan : Use `run_floorplan` command
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/817eeba9-d188-4259-8290-dea04dda332b)
+
+The output the the floorplanning phase is a DEF file which describes core area and placement of standard cell SITES:
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/918dbbc2-f927-4bdf-b081-9e2a4f992a21)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/a70cc5b7-27f7-4832-b932-435b26a6ef40)
+
+## Viewing Floorplan In Magic
+To view our floorplan in Magic we need to provide three files as input:
+
+1. Magic technology file (sky130A.tech)
+2. Def file of floorplan
+3. Merged LEF file
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/e4f61e5d-4b36-43db-a00a-f74982f938d2)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/d5ce18ea-5538-4443-a7c0-45bb05355e9f)
+
+## Placement
+
+To run placement : Use `run_placement` command
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/76d5c171-ab27-4bf6-b1d3-249e2c2b759d)
+
