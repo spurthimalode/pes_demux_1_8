@@ -13,7 +13,7 @@ The Truth Table for a 1:8 Demultiplexer is given below. ( Where A is the Input a
 
 The Verilog code for 1:8 Demultiplexer is given below :
 ```
-module pes_demux_1_8 (output o0 , output o1, output o2 , output o3, output o4, output o5, output o6 , output o7 , input [2:0] sel  , input i);
+module demux_1_8 (output o0 , output o1, output o2 , output o3, output o4, output o5, output o6 , output o7 , input [2:0] sel  , input i);
 reg [7:0]y_int;
 assign {o7,o6,o5,o4,o3,o2,o1,o0} = y_int;
 integer k;
@@ -39,7 +39,7 @@ endmodule
 The test bench check that each combination of input lines that connects the appropriate input to the output. The test bench code in Verilog for 1:8 Demultiplexer is given below :
 ```
 `timescale 1ns / 1ps
-module pes_demux_1_8_tb();
+module demux_1_8_tb();
 	// Inputs
 	reg i;
 	reg [2:0] sel;
@@ -51,7 +51,7 @@ module pes_demux_1_8_tb();
 	wire o7,o6,o5,o4,o3,o2,o1,o0;
 
         // Instantiate the Unit Under Test (UUT)
-	pes_demux_1_8 uut (
+	demux_1_8 uut (
 		.sel(sel),
 		.o0(o0),
 		.o1(o1),
@@ -92,9 +92,9 @@ endmodule
 ## Simulation
 Code for the simulation is given below:
 ```
-iverilog pes_demux_1_8.v pes_demux_1_8_tb.v
+iverilog demux_1_8.v demux_1_8_tb.v
 ./a.out
-gtkwave pes_demux_1_8_tb.vcd
+gtkwave demux_1_8_tb.vcd
 ```
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/b3cd69e1-4827-4396-a4bb-bc9f8e803e46)
 
@@ -102,8 +102,8 @@ gtkwave pes_demux_1_8_tb.vcd
 Code for the synthesis is given below:
 ```
 yosys:read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib 
-yosys:read_verilog pes_demux_1_8.v
-yosys:synth -top pes_demux_1_8
+yosys:read_verilog demux_1_8.v
+yosys:synth -top demux_1_8
 yosys:abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib 
 yosys:show
 ```
@@ -114,9 +114,9 @@ yosys:show
 ## Gate level simulation
 Code for gate level simulation is given below:
 ```
-iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v pes_demux_1_8.v pes_demux_1_8_tb.v
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v demux_1_8.v demux_1_8_tb.v
 ./a.out
-gtkwave pes_demux_1_8_tb.vcd
+gtkwave demux_1_8_tb.vcd
 ```
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/1afee132-c851-42ab-82ec-aec29e282197)
 
@@ -177,8 +177,19 @@ OpenLANE flow consists of several stages. By default, all flow steps are run in 
       <li>Netgen - Performs LVS Checks </li>
   </ul>
 
-## Invoking Openlane
+## Openlane Automated Flow
+The command to run the automated flow :
+```
+./flow.tcl -design openlane/<design folder name> -tag <run folder name>
 
+```
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/48b8f037-79c0-41e3-ae8e-cb3f194fb1dd)
+
+Flow completed without any fatal errors
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/60b24d98-797b-45eb-8266-73cc241d0407)
+
+## Openlane interactive mode
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/84ca3818-e45c-41fd-9ea7-442508693c30)
 
  - ./flow.tcl is the script which runs the OpenLANE flow
@@ -208,6 +219,8 @@ To run synthesis: Use `run_synthesis` command
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/1609f2cb-42c5-4bfb-b27f-5f8e4a9c9dad)
 
+Synthesis was Successful
+
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/4434c837-0cd7-4504-8d8f-9bbe4bab946b)
 
 
@@ -229,14 +242,40 @@ To view our floorplan in Magic we need to provide three files as input:
 1. Magic technology file (sky130A.tech)
 2. Def file of floorplan
 3. Merged LEF file
+   
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/5d144aa8-aac9-4cd8-b951-64d4cb0b1d62)
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/e4f61e5d-4b36-43db-a00a-f74982f938d2)
 
-![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/d5ce18ea-5538-4443-a7c0-45bb05355e9f)
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/dc5106bf-d35a-432b-b992-f139cf79cdfe)
 
 ## Placement
 
 To run placement : Use `run_placement` command
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/76d5c171-ab27-4bf6-b1d3-249e2c2b759d)
+
+Placement Analysis
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/bd686abf-23cc-45c9-8b1e-b95923fa5f15)
+
+demux_1_8.placement.def.png
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/c4cde960-a4aa-4f83-bd64-9f86c687875b)
+
+## Routing
+
+To run routing : Use `run_routing` command
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/961bef09-66a0-4790-9c52-d4c964c31e7e)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/45189536-49db-48bb-8f6b-f005f8305506)
+
+Routing was successful 
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/bf886907-52d3-4dc0-a6ca-259a2d76054b)
+
+demux_1_8.def.png
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/c5631e78-596f-4d94-a282-70da018c3bec)
 
