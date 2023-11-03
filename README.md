@@ -2,7 +2,7 @@
 The Demultiplexer is a one-to-many circuit. By using it, the transmission of data can be done through one single input to a number of output data lines.
 Generally, Demultiplexers are used in decoder circuits and Boolean function generators.
 
-![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/7c55d595-222d-4350-bbc6-f89ee98fe604)
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/20d30743-cb7b-4a42-bd65-221141ed1301)
 
 ## 1:8 Demultiplexer Truth Table
 The Truth Table for a 1:8 Demultiplexer is given below. ( Where A is the Input and , S0,S1,S2 are the three select lines and Y0,Y1,Y2,Y3,Y4,Y5,Y6,Y7 are the eight outputs of 1:8 Demultiplexer.
@@ -13,11 +13,11 @@ The Truth Table for a 1:8 Demultiplexer is given below. ( Where A is the Input a
 
 The Verilog code for 1:8 Demultiplexer is given below :
 ```
-module demux_1_8 (output o0 , output o1, output o2 , output o3, output o4, output o5, output o6 , output o7 , input [2:0] sel  , input i);
+module demux_1_8 (output o0 , output o1, output o2 , output o3, output o4, output o5, output o6 , output o7 , input [2:0] sel  , input i , input clk);
 reg [7:0]y_int;
 assign {o7,o6,o5,o4,o3,o2,o1,o0} = y_int;
 integer k;
-always @ (*)
+always @ (posedge clk)
 begin
 y_int = 8'b0;
 	case(sel)
@@ -217,7 +217,10 @@ prep is used to make file structure for our design. To set this up do:
 
 To run synthesis: Use `run_synthesis` command
 
-![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/1609f2cb-42c5-4bfb-b27f-5f8e4a9c9dad)
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/9e2358d4-0d57-4b1c-8748-50ece7e882e4)
+
+Flop ratio : Flop ratio = Number of D Flip flops / Total number of cells
+Flop ratio for my design is 8/32 = 0.25
 
 Synthesis was Successful
 
@@ -225,6 +228,7 @@ Synthesis was Successful
 
 
 ## Floorplan
+In the VLSI physical design, floorplanning is an essential design step, as it determines the size, shape, and locations of modules in a chip and as such it estimates the total chip area, the interconnects, and, delay.
 
 To run floorplan : Use `run_floorplan` command
 
@@ -251,6 +255,8 @@ To view our floorplan in Magic we need to provide three files as input:
 
 ## Placement
 
+Placement is the process of placing the standard cells inside the core boundary in an optimal location.
+
 To run placement : Use `run_placement` command
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/76d5c171-ab27-4bf6-b1d3-249e2c2b759d)
@@ -259,21 +265,70 @@ Placement Analysis
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/bd686abf-23cc-45c9-8b1e-b95923fa5f15)
 
+Post the placement run, a .def file will have been created within the results/placement directory.
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/f07134b2-b178-4cf7-99c6-97353448b49a)
+
+To view placement in magic:
+```
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read demux_1_8.placement.def &
+```
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/0c7d03d9-2c6e-477a-8c34-6ccc0a838cf1)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/73e80e7c-b144-49ad-891c-ad61acabb864)
+
 demux_1_8.placement.def.png
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/c4cde960-a4aa-4f83-bd64-9f86c687875b)
 
+## Clock Tree Synthesis
+Clock Tree Synthesis is a technique for distributing the clock equally among all sequential parts of a VLSI design. The purpose of Clock Tree Synthesis is to reduce skew and delay. Clock Tree Synthesis is provided the placement data as well as the clock tree limitations as input.
+
+To run clock tree synthesis : Use `run_cts` command
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/3c1ad4d0-73dc-422e-b857-fa5da3e9cb56)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/31d62538-d764-4eb9-b0b6-d30214aa4031)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/662443f2-3b2b-4cc3-8d5f-6470da302b43)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/52854649-f4fc-4860-a756-fad0caaa6cab)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/c5d0bd6c-cb53-4ffc-b14e-b77b29f82a31)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/9ebeed8d-76a7-4681-98fa-33231c653907)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/8017e562-cc84-4d7f-bd54-18e0f3f4dd72)
+
+
 ## Routing
+Implements the interconnect system between standard cells using the remaining available metal layers after CTS and PDN generation. The routing is performed on routing grids to ensure minimal DRC errors.
 
 To run routing : Use `run_routing` command
 
-![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/961bef09-66a0-4790-9c52-d4c964c31e7e)
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/5aa8f304-d667-41a5-a98a-af12af958073)
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/45189536-49db-48bb-8f6b-f005f8305506)
 
 Routing was successful 
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/bf886907-52d3-4dc0-a6ca-259a2d76054b)
+
+Post the routing run, a .def file will have been created within the results/routing directory.
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/cbe86c0a-2a41-4d05-a062-e38e5bed301e)
+
+To view routing in magic:
+```
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read demux_1_8.def &
+```
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/038a7ef7-2e43-4c7c-812d-89284c77f696)
+
+Area Report
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/0e53ca50-3811-4234-82a5-f59426c360ad)
 
 demux_1_8.def.png
 
