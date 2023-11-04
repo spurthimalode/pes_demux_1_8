@@ -301,7 +301,6 @@ To run clock tree synthesis : Use `run_cts` command
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/8017e562-cc84-4d7f-bd54-18e0f3f4dd72)
 
-
 ## Routing
 Implements the interconnect system between standard cells using the remaining available metal layers after CTS and PDN generation. The routing is performed on routing grids to ensure minimal DRC errors.
 
@@ -334,3 +333,23 @@ demux_1_8.def.png
 
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/c5631e78-596f-4d94-a282-70da018c3bec)
 
+## Reports
+Die Area
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/559fa849-6552-4ad0-9728-85162bfdb4b2)
+
+Core Area
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/5282a930-6353-4cc3-9c98-de05c4d6c1e9)
+
+Power Report
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/b1f89ee5-6419-410f-81c6-a767b3cdbd32)
+
+Summary
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/55610b25-8dae-4ddb-bd94-1c85f6c9452c)
+
+Manufacturability
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/e3fc36a1-05fd-4023-87c4-69a2885173a6)
