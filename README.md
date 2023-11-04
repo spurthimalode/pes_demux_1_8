@@ -183,11 +183,15 @@ The command to run the automated flow :
 ./flow.tcl -design openlane/<design folder name> -tag <run folder name>
 
 ```
-![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/48b8f037-79c0-41e3-ae8e-cb3f194fb1dd)
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/1f15c0fc-dc8d-4bf2-b1be-4a7b15bce0ab)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/f3399164-2605-4c71-9496-21a01c4364d1)
+
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/22609e4d-8329-40c9-95f2-4494b7c7d53d)
 
 Flow completed without any fatal errors
 
-![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/60b24d98-797b-45eb-8266-73cc241d0407)
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/1d617053-0bac-49b0-934c-883ea8ecc62f)
 
 ## Openlane interactive mode
 ![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/84ca3818-e45c-41fd-9ea7-442508693c30)
