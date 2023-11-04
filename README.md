@@ -356,4 +356,4 @@ Summary
 
 Manufacturability
 
-![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/e3fc36a1-05fd-4023-87c4-69a2885173a6)
+![image](https://github.com/spurthimalode/pes_demux_1_8/assets/142222859/1046e922-d450-4ee9-b5fc-dc7c699285b7)
